@@ -1,12 +1,11 @@
 import urllib.request
-from multiprocessing import Process
 finished=False
 names=[]
-emails=[]-
+emails=[]
 def getPage(pageNo):
     url = "https://www.southampton.ac.uk/people?page="+str(pageNo)
     text = urllib.request.urlopen(url).read()
-    text=text.decode("utf8")
+    text=text.decode("utf-8")
     return text
 def addNames(string):
     global names
@@ -48,12 +47,22 @@ def findName(txt):
         tempString=tempString[:tempString.find('"')]
         addNames(breakUpNames(tempString))
 def main(lowerRange, upperRange):
-    global duplicateHandler
-    for x in range(lowerRange,upperRange):
-        duplicateHandler=0
-        findName(getPage(x))
-        findEmail(getPage(x))
-        print('By Page'+str(x)+' weve got '+str(len(names))+' names and '+str(len(emails))+' emails')
+    global names
+    global emails
+    currentLine=lowerRange
+    names=[]
+    emails=[]
+    try:
+        global duplicateHandler
+        for x in range(lowerRange,upperRange):
+            duplicateHandler=0
+            findName(getPage(x))
+            findEmail(getPage(x))
+            print('By Page'+str(x)+' weve got '+str(len(names))+' names and '+str(len(emails))+' emails')
+            currentLine+=1
+    except UnicodeDecodeError:
+        print('ERROR Contacting the website, starting again')
+        main(currentLine, upperRange)
 main(0,437)       #Since I don't know threading/multiprocessing yet the program is a bit slow. 
 i=0             #However I do think if I did it would be simple to implement
 for each in names:
