@@ -68,7 +68,7 @@ def main(lowerRange, upperRange):
         print('By Page'+str(x)+' weve got '+str(len(names))+' names and '+str(len(emails))+' emails')
         
 #-----------main------------------
-main(437)       #Since I don't know threading/multiprocessing yet the program is a bit slow. 
+main(0,437)       #Since I don't know threading/multiprocessing yet the program is a bit slow. 
 i=0             #However I do think if I did it would be simple to implement
 for each in names:
     print(str(i+1))
