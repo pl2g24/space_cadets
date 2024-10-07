@@ -2,10 +2,6 @@
 import urllib.request
 from multiprocessing import Process
 #-------------starting variables---
-pageNo=7
-
-titles=['Adrian']
-latestFound=0
 finished=False
 names=[]
 emails=[]
