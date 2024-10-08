@@ -1,0 +1,107 @@
+class variable:
+    name=''
+    value=0
+    def __init__(self,name,value):
+        self.value=value
+        self.name=name
+
+    def getValue(self):
+        return self.value
+    def incrValue(self):
+        self.value+=1
+        print('Value of '+self.name+' incremented to '+str(self.value))
+        return self.value
+    def decrValue(self):
+        self.value-=1
+        print('Value of '+self.name+' decremented to '+str(self.value))
+        return self.value
+    def resetValue(self):
+        self.value=0
+        return self.value
+    def getName(self):
+        return self.name
+
+
+def getValueFromArr(arr, search):
+    count=0
+    found=False
+    for each in arr:
+        if(each.getName()==search):
+            found=True
+            return count
+        else:
+            count+=1
+    if(found==False):
+        return -1
+
+def whileLoopBreak(arr,val,var):
+    tempInt=getValueFromArr(var, arr[0][val])
+    tempStr1=str(arr[1][val])
+    tempStr2=str(var[tempInt].getValue())
+    if(tempStr1==tempStr2):
+        return 'break'
+    else:
+        return arr[3][val]
+
+def main():
+    variables=[]
+    breakVar=False
+    i=0
+    whileTracker=[[],[],[],[]]     #[variable,value,condition,start]
+    fileName='barebones.txt'    #For Testing
+    #file=str(input('What Barebones (txt) file would you like to run \n>>>'))
+    file=open(fileName)
+    instructions=file.readlines()
+
+
+    while breakVar==False:
+
+        currentInstruction=instructions[i].strip()
+        if(currentInstruction[-1:]!=';'):       #check for syntax error
+            #print('Syntax Error, missing ";" on line '+str(i+1))
+            breakVar=True;
+            i+=1
+
+        elif(currentInstruction=='end;'):       #end program/break while loop
+            if(len(whileTracker[0])==0):
+                print('Successful Ending')
+                breakVar=True
+            else:                               #Break the while loop
+                if(whileLoopBreak(whileTracker,len(whileTracker[0])-1,variables)=='break'):
+                    whileTracker[0].pop()
+                    whileTracker[1].pop()
+                    whileTracker[2].pop()
+                    whileTracker[3].pop()
+                    i+=1
+                else:
+                    i=whileLoopBreak(whileTracker,len(whileTracker[0])-1,variables)
+        elif(currentInstruction[:5]=='clear'):  #declaring variables/clearing
+            searchCheck=getValueFromArr(variables,currentInstruction[6:currentInstruction.find(';')])
+            if(searchCheck==-1):
+                variables.append(variable(currentInstruction[6:currentInstruction.find(';')],0))
+                print('Declared variable',currentInstruction[6:currentInstruction.find(';')])
+
+            else:
+                print('Resetting variable '+ variables[searchCheck].getName())
+                variables[searchCheck].resetValue()
+
+            i+=1
+
+        elif(currentInstruction[:4]=='incr'): #incrementing
+            variables[getValueFromArr(variables,currentInstruction[5:currentInstruction.find(';')])].incrValue()
+            i+=1
+        elif(currentInstruction[:4]=='decr'): #decrementing
+            variables[getValueFromArr(variables,currentInstruction[5:currentInstruction.find(';')])].decrValue()
+            i+=1
+        elif(currentInstruction[:5]=='while'):  #while loop
+            i+=1
+            print('beginning while loop')
+            tempString=currentInstruction[6:]
+
+            whileTracker[0].append(tempString[:tempString.find(' ')])
+            tempString=tempString[tempString.find(' ')+1:]
+            whileTracker[2].append(tempString[:tempString.find(' ')])
+            tempString=tempString[tempString.find(' ')+1:]
+            whileTracker[1].append(tempString[:tempString.find(' ')])
+            whileTracker[3].append(i)
+main()
