@@ -24,6 +24,7 @@ class variable:
         return self.value
     def getName(self):
         return self.name
+
 def getValueFromArr(arr, search):
     count=0
     found=False
@@ -45,21 +46,24 @@ def whileLoopBreak(arr,val,var):
     else:
         return arr[3][val]
 def main():
-    try:
-        variables=[]
-        breakVar=False
-        i= 0
-        whileTracker=[[],[],[],[]]     #[variable,value,condition,start]
-        fileName=str(input('What Barebones (txt) file would you like to run \n>>>'))
-        file=open()
-        instructions=file.readlines()
-        while breakVar==False:
+    variables=[]
+    breakVar=False
+    i= 0
+    whileTracker=[[],[],[],[]]     #[variable,value,condition,start]
+    fileName='barebones.txt'    #For Testing
+    #file=str(input('What Barebones (txt) file would you like to run \n>>>'))
+    file=open(fileName)
+    instructions=file.readlines()
+    instructions.append("JE SUIS FINIS;")
+    while breakVar==False:
             currentInstruction=instructions[i].strip()
             if(currentInstruction[-1:]!=';'):       #check for syntax error
                 #print('Syntax Error, missing ";" on line '+str(i+1))
                 breakVar=True;
                 i+=1
-
+            elif currentInstruction=="JE SUIS FINIS;":
+                breakVar=True
+                print('Successful Ending')
             elif(currentInstruction=='end;'):       #end program/break while loop
                 if(len(whileTracker[0])==0):
                     print('Successful Ending')
@@ -99,6 +103,7 @@ def main():
                     else:
                         BreakVar=True
                         i+=1
+
                 except IndexError:
                     print("ERROR: You haven't declared this variable")
                     breakVar=True
@@ -119,6 +124,4 @@ def main():
             else:
                 print('ERROR: Unrecognised code')
                 breakVar=True
-    except IndexError:
-        print('')
 main()
